@@ -101,8 +101,12 @@ The files in this repository are:
 
 * `Config.gs` — global configuration, reads all settings from Script Properties
 * `Main.gs` — core email processing loop, runs every minute
+* `GmailManager.gs` — Gmail operations: filtering, labelling, and historical context retrieval
 * `GeminiAPI.gs` — Gemini API integration, handles multimodal content and file generation
+* `AttachmentHandler.gs` — processes incoming attachments and generates outgoing files (TXT, MD, CSV, PDF, DOCX, XLSX, SVG, PNG)
+* `UserSettings.gs` — per-user personal rules and `#SET_USER_PROMPT` / `#GET_PROMPT` commands
 * `AdminCommands.gs` — handles `#ADD_USER`, `#REMOVE_USER`, `#LIST_USERS`, `#SET_ADMIN` commands
+* `Logger.gs` — activity logging to Google Sheets
 * `AutoSetup.gs` — one-time setup script, creates resources and configures the project
 
 #### Step 5 — Set Script Properties
@@ -278,11 +282,15 @@ For a full description of security practices, see [SECURITY.md](SECURITY.md).
 
 ```
 maillifier/maillifier
-├── Config.gs           — reads all settings from Script Properties at runtime
-├── Main.gs             — processEmails() runs every minute, orchestrates the pipeline
-├── GeminiAPI.gs        — Gemini API calls, multimodal input, file generation markers
-├── AdminCommands.gs    — #ADD_USER, #REMOVE_USER, #LIST_USERS, #SET_ADMIN
-└── AutoSetup.gs        — runInitialSetup(), one-time setup, creates all resources
+├── Config.gs              — reads all settings from Script Properties at runtime
+├── Main.gs                — processEmails() runs every minute, orchestrates the pipeline
+├── GmailManager.gs        — Gmail filtering, labelling, whitelist checks, historical context
+├── GeminiAPI.gs           — Gemini API calls, multimodal input, file generation markers
+├── AttachmentHandler.gs   — incoming attachment processing, outgoing file generation
+├── UserSettings.gs        — per-user personal rules via #SET_USER_PROMPT / #GET_PROMPT
+├── AdminCommands.gs       — #ADD_USER, #REMOVE_USER, #LIST_USERS, #SET_ADMIN
+├── Logger.gs              — activity logging to Google Sheets
+└── AutoSetup.gs           — runInitialSetup(), one-time setup, creates all resources
 ```
 
 ---
@@ -294,7 +302,6 @@ maillifier/maillifier
 - [ ] Template presets for common response scenarios
 - [ ] Advanced rate limiting and quota management
 - [ ] Conversation threading improvements
-- [ ] Attachment analysis (images, PDFs) in forwarded emails
 - [ ] Web dashboard for configuration and monitoring
 
 Have an idea? [Open an issue](https://github.com/maillifier/maillifier/issues) — we'd love to hear from you.
