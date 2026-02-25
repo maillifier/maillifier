@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e"/>
+      <stop offset="100%" style="stop-color:#16a34a"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#a855f7"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316"/>
+      <stop offset="100%" style="stop-color:#ea580c"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#14b8a6"/>
+      <stop offset="100%" style="stop-color:#0d9488"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="340" rx="12" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="450" y="36" text-anchor="middle" fill="#94a3b8" font-size="13" font-weight="500" letter-spacing="2">MAILLIFIER ARCHITECTURE</text>
+
+  <!-- Dashed boundary: Agent Account -->
+  <rect x="255" y="55" width="520" height="230" rx="10" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="515" y="74" text-anchor="middle" fill="#475569" font-size="11" font-weight="600" letter-spacing="1.5">AGENT GOOGLE ACCOUNT</text>
+
+  <!-- Node: Your Inbox -->
+  <rect x="30" y="130" width="170" height="70" rx="10" fill="url(#blue)" filter="url(#shadow)"/>
+  <text x="115" y="161" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">📬  Your Inbox</text>
+  <text x="115" y="179" text-anchor="middle" fill="#bfdbfe" font-size="10">you@gmail.com</text>
+
+  <!-- Node: Agent Gmail -->
+  <rect x="280" y="130" width="170" height="70" rx="10" fill="url(#green)" filter="url(#shadow)"/>
+  <text x="365" y="161" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">📧  Agent Gmail</text>
+  <text x="365" y="179" text-anchor="middle" fill="#bbf7d0" font-size="10">agent@gmail.com</text>
+
+  <!-- Node: Apps Script -->
+  <rect x="500" y="130" width="150" height="70" rx="10" fill="url(#purple)" filter="url(#shadow)"/>
+  <text x="575" y="161" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">⚙️  Apps Script</text>
+  <text x="575" y="179" text-anchor="middle" fill="#e9d5ff" font-size="10">processEmails()</text>
+
+  <!-- Node: Gemini API -->
+  <rect x="700" y="130" width="150" height="70" rx="10" fill="url(#orange)" filter="url(#shadow)"/>
+  <text x="775" y="161" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">🤖  Gemini API</text>
+  <text x="775" y="179" text-anchor="middle" fill="#fed7aa" font-size="10">AI draft generation</text>
+
+  <!-- Node: Knowledge Base -->
+  <rect x="340" y="225" width="140" height="50" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1" filter="url(#shadow)"/>
+  <text x="410" y="254" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="500">📄 Knowledge Base</text>
+
+  <!-- Node: Activity Log -->
+  <rect x="520" y="225" width="140" height="50" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1" filter="url(#shadow)"/>
+  <text x="590" y="254" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="500">📊 Activity Log</text>
+
+  <!-- Arrows -->
+  <!-- Your Inbox → Agent Gmail -->
+  <line x1="200" y1="155" x2="275" y2="155" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="237" y="148" text-anchor="middle" fill="#94a3b8" font-size="9">Forward</text>
+
+  <!-- Agent Gmail → Apps Script -->
+  <line x1="450" y1="165" x2="495" y2="165" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Apps Script → Gemini -->
+  <line x1="650" y1="165" x2="695" y2="165" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Gemini → Apps Script (return) -->
+  <path d="M 695 175 L 655 175" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrowhead2)"/>
+
+  <!-- Apps Script → Your Inbox (return) -->
+  <path d="M 500 190 C 400 220, 250 220, 115 205" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="5 3" fill="none" marker-end="url(#arrowgreen)"/>
+  <text x="310" y="218" text-anchor="middle" fill="#4ade80" font-size="9">Draft reply</text>
+
+  <!-- Apps Script → Knowledge Base -->
+  <line x1="540" y1="200" x2="470" y2="225" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <!-- Apps Script → Activity Log -->
+  <line x1="580" y1="200" x2="590" y2="225" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <!-- Arrowheads -->
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+    </marker>
+    <marker id="arrowhead2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+    </marker>
+    <marker id="arrowgreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#22c55e"/>
+    </marker>
+  </defs>
+
+  <!-- Footer legend -->
+  <rect x="30" y="300" width="10" height="10" rx="2" fill="#334155"/>
+  <text x="46" y="310" fill="#64748b" font-size="10">Dashed border = processing inside agent account only</text>
+
+  <circle cx="330" cy="305" r="4" fill="#22c55e"/>
+  <text x="340" y="310" fill="#64748b" font-size="10">Green path = AI-drafted reply returned to you</text>
+
+  <rect x="610" y="300" width="10" height="10" rx="2" fill="#1e3a5f" stroke="#3b82f6" stroke-width="0.5"/>
+  <text x="626" y="310" fill="#64748b" font-size="10">Google Drive files (agent-owned)</text>
+</svg>

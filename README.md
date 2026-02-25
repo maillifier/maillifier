@@ -1,18 +1,58 @@
-# Maillifier
+<p align="center">
+  <h1 align="center">Maillifier</h1>
+  <p align="center">AI email assistant that runs entirely inside your own Google account.<br/>Forward any email → get an AI-drafted reply in minutes.</p>
+</p>
 
-AI email assistant that runs inside your own Google account. Forward any email to your agent and receive an AI-drafted reply within minutes — powered by Gemini, built on Google Apps Script.
+<p align="center">
+  <a href="https://github.com/maillifier/maillifier/blob/main/LICENSE"><img src="https://img.shields.io/github/license/maillifier/maillifier?style=flat-square" alt="License"></a>
+  <a href="https://github.com/maillifier/maillifier/stargazers"><img src="https://img.shields.io/github/stars/maillifier/maillifier?style=flat-square" alt="Stars"></a>
+  <a href="https://github.com/maillifier/maillifier/issues"><img src="https://img.shields.io/github/issues/maillifier/maillifier?style=flat-square" alt="Issues"></a>
+  <a href="https://github.com/maillifier/maillifier/commits/main"><img src="https://img.shields.io/github/last-commit/maillifier/maillifier?style=flat-square" alt="Last Commit"></a>
+</p>
 
-**Website:** [maillifier.com](https://maillifier.com) · **Support:** [GitHub Issues](https://github.com/maillifier/maillifier/issues)
+<p align="center">
+  <b>Website:</b> <a href="https://maillifier.com">maillifier.com</a> · <b>Support:</b> <a href="https://github.com/maillifier/maillifier/issues">GitHub Issues</a>
+</p>
+
+---
+
+## Why Maillifier?
+
+Most AI email tools require you to grant full access to your inbox, route your messages through third-party servers, or lock you into a proprietary platform. Maillifier takes a fundamentally different approach:
+
+- **No third-party inbox access** — the agent only sees emails you explicitly forward to it.
+- **Runs entirely in your Google account** — a Google Apps Script project in a dedicated Gmail account. No external servers.
+- **Zero vendor lock-in** — the source code is yours. Fork it, modify it, host it yourself.
+- **Transparent architecture** — every line of code is in this repository, nothing hidden.
+- **Admin-controlled user access** — whitelist who can use the agent, revoke access instantly.
+
+---
+
+## Demo
+
+> **Screenshots and a demo GIF are coming soon.** If you would like to contribute screenshots of your setup, please open a PR.
+
+<!-- When ready, uncomment:
+![Architecture](docs/architecture.svg)
+-->
+
+### Architecture
+
+```
+Your inbox ──Forward──▶ Agent Gmail ──▶ Apps Script ──▶ Gemini API
+                              │                              │
+                              │         Knowledge Base       │
+                              │         Activity Log         │
+                              ◀──────── Draft reply ◀────────┘
+```
+
+The agent account is a standalone Gmail account. Your personal inbox is never accessed. See [Architecture](#architecture-1) below for details.
 
 ---
 
 ## How it works
 
 Maillifier installs a Google Apps Script project directly into a dedicated Gmail account (the "agent account"). The script monitors the agent inbox, processes forwarded emails using the Gemini API, and sends AI-drafted replies back to you. Your personal Gmail account is never accessed — all processing happens inside the agent account.
-
-```
-Your inbox → Forward email → Agent account → Gemini API → Draft reply → Your inbox
-```
 
 ---
 
@@ -34,9 +74,9 @@ Use this method to install immediately without waiting for tester approval. You 
 
 #### Step 1 — Prerequisites
 
-- A dedicated Gmail account to use as the agent (e.g. `myagent@gmail.com`). Using a separate account is strongly recommended — do not use your personal inbox.
-- A Gemini API key. Get one free at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
-- The Gemini API must be enabled in your Google Cloud project. Open [this link](https://console.cloud.google.com/apis/library/generativelanguage.googleapis.com), select the correct project, and click Enable if it is not already enabled.
+* A dedicated Gmail account to use as the agent (e.g. `myagent@gmail.com`). Using a separate account is strongly recommended — do not use your personal inbox.
+* A Gemini API key. Get one free at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
+* The Gemini API must be enabled in your Google Cloud project. Open [this link](https://console.cloud.google.com/apis/library/generativelanguage.googleapis.com), select the correct project, and click Enable if it is not already enabled.
 
 #### Step 2 — Enable Google Apps Script API
 
@@ -59,11 +99,11 @@ In the Apps Script editor, create a new script file for each `.gs` file in this 
 
 The files in this repository are:
 
-- `Config.gs` — global configuration, reads all settings from Script Properties
-- `Main.gs` — core email processing loop, runs every minute
-- `GeminiAPI.gs` — Gemini API integration, handles multimodal content and file generation
-- `AdminCommands.gs` — handles `#ADD_USER`, `#REMOVE_USER`, `#LIST_USERS`, `#SET_ADMIN` commands
-- `AutoSetup.gs` — one-time setup script, creates resources and configures the project
+* `Config.gs` — global configuration, reads all settings from Script Properties
+* `Main.gs` — core email processing loop, runs every minute
+* `GeminiAPI.gs` — Gemini API integration, handles multimodal content and file generation
+* `AdminCommands.gs` — handles `#ADD_USER`, `#REMOVE_USER`, `#LIST_USERS`, `#SET_ADMIN` commands
+* `AutoSetup.gs` — one-time setup script, creates resources and configures the project
 
 #### Step 5 — Set Script Properties
 
@@ -72,7 +112,7 @@ The files in this repository are:
 3. Add the following properties:
 
 | Property | Description | Example |
-|----------|-------------|---------|
+| --- | --- | --- |
 | `AGENT_NAME` | Display name for your agent | `Maillifier` |
 | `ADMIN_EMAIL` | Your personal email address (receives setup instructions and agent commands) | `you@gmail.com` |
 | `WAITING_INTERVAL` | How often to check for new emails, in minutes | `1` |
@@ -87,7 +127,7 @@ Do not add `KNOWLEDGE_BASE_URL`, `LOG_SHEET_URL`, or `AGENT_EMAIL` — these are
 3. Google will ask you to authorise the script. You will see the following permissions:
 
    | Permission | Why it is needed |
-   |------------|-----------------|
+   | --- | --- |
    | Read, compose, and send emails | To monitor the agent inbox, send draft replies, and create Gmail labels |
    | See and manage Google Drive files created by this app | To access the Knowledge Base document and activity log — no other Drive files are visible |
    | See, edit, create, and delete Google Docs | To create and write to the Knowledge Base document during setup |
@@ -96,16 +136,16 @@ Do not add `KNOWLEDGE_BASE_URL`, `LOG_SHEET_URL`, or `AGENT_EMAIL` — these are
    | Run when you are not present | To create a time-based trigger that checks for new emails every minute |
 
    Click **Allow**.
-
 4. Wait for the execution log to show `Setup complete!`.
 
 The setup function will:
-- Create a Knowledge Base document in the agent's Google Drive
-- Create an activity log spreadsheet
-- Write all Script Properties including the resource URLs
-- Create Gmail labels `Maillifier-History` and `Filtered/External`
-- Create a time-based trigger that runs `processEmails` every minute
-- Send an activation email to `ADMIN_EMAIL`
+
+* Create a Knowledge Base document in the agent's Google Drive
+* Create an activity log spreadsheet
+* Write all Script Properties including the resource URLs
+* Create Gmail labels `Maillifier-History` and `Filtered/External`
+* Create a time-based trigger that runs `processEmails` every minute
+* Send an activation email to `ADMIN_EMAIL`
 
 #### Step 7 — Verify the trigger
 
@@ -196,7 +236,7 @@ Professional but approachable. Always sign off with "Best regards".
 All configuration is stored in Script Properties. You can edit them at any time in Project Settings without redeploying.
 
 | Property | Set by | Description |
-|----------|--------|-------------|
+| --- | --- | --- |
 | `AGENT_NAME` | You | Display name used in emails and labels |
 | `AGENT_EMAIL` | AutoSetup | Email address of the agent account |
 | `ADMIN_EMAIL` | You | Admin email — receives instructions, can run admin commands |
@@ -226,11 +266,13 @@ Maillifier uses a Split-Scope OAuth architecture. The installer at maillifier.co
 
 ### Privacy
 
-- The agent only processes emails that are explicitly forwarded to it.
-- Processed emails are moved to the `Maillifier-History` label and marked as read.
-- Emails from addresses not in `WHITELIST_EMAILS` are moved to `Filtered/External` and never processed.
-- The agent's Drive access uses the `drive.file` scope — it can only access files it created (the Knowledge Base and activity log). It cannot read or list any other files in the account.
-- No email content is stored outside of Google's infrastructure.
+* The agent only processes emails that are explicitly forwarded to it.
+* Processed emails are moved to the `Maillifier-History` label and marked as read.
+* Emails from addresses not in `WHITELIST_EMAILS` are moved to `Filtered/External` and never processed.
+* The agent's Drive access uses the `drive.file` scope — it can only access files it created (the Knowledge Base and activity log). It cannot read or list any other files in the account.
+* No email content is stored outside of Google's infrastructure.
+
+For a full description of security practices, see [SECURITY.md](SECURITY.md).
 
 ### File structure
 
@@ -242,6 +284,20 @@ maillifier/maillifier
 ├── AdminCommands.gs    — #ADD_USER, #REMOVE_USER, #LIST_USERS, #SET_ADMIN
 └── AutoSetup.gs        — runInitialSetup(), one-time setup, creates all resources
 ```
+
+---
+
+## Roadmap
+
+- [ ] Gmail add-on UI
+- [ ] Multi-agent support (multiple agent accounts, centralised management)
+- [ ] Template presets for common response scenarios
+- [ ] Advanced rate limiting and quota management
+- [ ] Conversation threading improvements
+- [ ] Attachment analysis (images, PDFs) in forwarded emails
+- [ ] Web dashboard for configuration and monitoring
+
+Have an idea? [Open an issue](https://github.com/maillifier/maillifier/issues) — we'd love to hear from you.
 
 ---
 
@@ -274,8 +330,18 @@ Re-run `runInitialSetup()` — it will recreate the trigger without overwriting 
 
 Pull requests are welcome. Please open an issue first to discuss significant changes.
 
+For security-related issues, see [SECURITY.md](SECURITY.md).
+
 ---
 
 ## License
 
-MIT
+[MIT](LICENSE)
+
+---
+
+## About the Author
+
+Built by [Maillifier](https://maillifier.com) — making AI email assistance private, transparent, and self-hosted.
+
+Questions or feedback? Open an issue or email [support@maillifier.com](mailto:support@maillifier.com).
