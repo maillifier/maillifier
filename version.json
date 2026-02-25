@@ -1,9 +1,0 @@
-{
-  "version": "2.5.2",
-  "date": "2026-02-15",
-  "changes": [
-    "Fix trigger interval: auto-round to valid values (1, 5, 10, 15, 30)",
-    "Dual version display in #CHECK_UPDATE",
-    "Offline version info fallback"
-  ]
-}
