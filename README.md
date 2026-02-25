@@ -127,7 +127,7 @@ Do not add `KNOWLEDGE_BASE_URL`, `LOG_SHEET_URL`, or `AGENT_EMAIL` — these are
 
 #### Step 6 — Run the setup
 
-1. In the function dropdown at the top of the editor, select `runInitialSetup`.
+1. Select AutoSetup.gs in Files. In the function dropdown at the top of the editor, select `runInitialSetup`.
 2. Click **Run**.
 3. Google will ask you to authorise the script. You will see the following permissions:
 
