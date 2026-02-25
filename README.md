@@ -108,6 +108,7 @@ The files in this repository are:
 * `AdminCommands.gs` — handles `#ADD_USER`, `#REMOVE_USER`, `#LIST_USERS`, `#SET_ADMIN` commands
 * `Logger.gs` — activity logging to Google Sheets
 * `AutoSetup.gs` — one-time setup script, creates resources and configures the project
+* `appsscript.json` — project manifest, enables Drive Advanced Service (copy via **Project Settings** → **Show "appsscript.json" manifest file**)
 
 #### Step 5 — Set Script Properties
 
