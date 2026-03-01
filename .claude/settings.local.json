@@ -4,7 +4,10 @@
       "Bash(node --version)",
       "Bash(npm --version)",
       "Bash(npm install -g @google/clasp)",
-      "Bash(git rm -r --cached functions/node_modules/)"
+      "Bash(git rm -r --cached functions/node_modules/)",
+      "Bash(git check-ignore -v .github/workflows/deploy.yml)",
+      "Bash(git config core.excludesFile)",
+      "Bash(xargs -0 echo)"
     ]
   }
 }
