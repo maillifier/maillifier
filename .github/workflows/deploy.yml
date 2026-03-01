@@ -1,0 +1,50 @@
+# ============================================================
+# maillifier — CI/CD
+# Repo: github.com/maillifier/maillifier (public PROD)
+# ============================================================
+# On push/merge to main: clasp push → PROD Apps Script project
+# ============================================================
+# Required GitHub Secrets:
+#   CLASPRC_JSON_PROD — contents of ~/.clasprc.json (vidnoe.soap2@gmail.com)
+# ============================================================
+
+name: Deploy GAS to PROD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install clasp
+        run: npm install -g @google/clasp
+
+      - name: Setup clasp credentials
+        env:
+          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON_PROD }}
+        run: echo "$CLASPRC_JSON" > ~/.clasprc.json
+
+      - name: Create .clasp.json
+        run: |
+          echo '{
+            "scriptId": "1Fy2_khpnVt_4hOtn17Yu1W1UpHm-fqWL9vgNXd2Sz_2bFXeI1lMlAvHy",
+            "rootDir": "."
+          }' > .clasp.json
+
+      - name: Push to Apps Script
+        run: clasp push --force
+
+      - name: Deployment summary
+        run: |
+          echo "✅ Deployed to PROD Apps Script"
+          echo "   Script ID: 1Fy2_khpnVt_4hOtn17Yu1W1UpHm-fqWL9vgNXd2Sz_2bFXeI1lMlAvHy"
+          echo "   Files pushed:"
+          ls -1 *.gs appsscript.json 2>/dev/null | sed 's/^/     /'
