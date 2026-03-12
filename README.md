@@ -56,21 +56,94 @@ Maillifier installs a Google Apps Script project directly into a dedicated Gmail
 
 ---
 
+## Try without installing (POC)
+
+Want to see Maillifier in action before setting it up? Visit [maillifier-dev.web.app/poc.html](https://maillifier-dev.web.app/poc.html) — enter your email, get a test message forwarded to the DEV agent, and receive an AI-drafted reply within a few minutes. No installation required.
+
+---
+
 ## Installation
 
 There are two ways to install Maillifier.
 
-### Option A — Automatic (via maillifier.com)
+### Option A — Script Installer (MaillifierDeployUpdate-dev.gs)
 
-> **Note:** Maillifier is currently awaiting Google OAuth verification. Until verification is complete, the automatic installer is available to approved testers only. If you would like to join the testing programme, email [support@maillifier.com](mailto:support@maillifier.com).
+Use this method to install automatically without copying files one by one. The installer script downloads all files from this repository, verifies SHA-1 integrity, and deploys them to your Apps Script project in one step.
 
-Once you have been added as a tester: visit [maillifier.com](https://maillifier.com), sign in with the Google account you want to use as the agent, and follow the on-screen steps. The installer creates the Apps Script project, Knowledge Base document, activity log, and trigger automatically.
+#### Prerequisites
 
-After installation, you will receive an activation email with instructions to add your Gemini API key.
+* A dedicated Gmail account (e.g. `myagent@gmail.com`). Do not use your personal inbox.
+* A Gemini API key from [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
+* A Google Cloud project you own with the **Apps Script API** enabled:
+  1. Go to [console.cloud.google.com](https://console.cloud.google.com) and create a new project (or select an existing one).
+  2. Go to **APIs & Services → Library**, search for **Apps Script API**, and click **Enable**.
+  3. Go to **APIs & Services → OAuth consent screen** and complete the minimum required fields (app name, user support email). External type is fine.
+  4. On the same OAuth consent screen page, scroll to **Test users** and add the agent Gmail account (e.g. `myagent@gmail.com`). This is required for unverified apps — without this step, authorisation will be blocked.
+  5. Note the **Project number** from the project's Dashboard on **Cloud Hub / Home / Project info** (you will need it in step 4 below).
+
+#### Step 1 — Create a new Apps Script project
+
+1. Open [script.google.com](https://script.google.com) **while logged in as the agent account**.
+2. Click **New project** and rename it to `Maillifier Agent`.
+3. Open **Project Settings** (gear icon) and check **Show "appsscript.json" manifest file in editor**.
+
+#### Step 2 — Set the minimal manifest
+
+Replace the contents of `appsscript.json` in the editor with:
+
+```json
+{
+  "timeZone": "Etc/UTC",
+  "dependencies": {},
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/script.projects",
+    "https://www.googleapis.com/auth/script.external_request"
+  ]
+}
+```
+
+#### Step 3 — Add the installer script
+
+1. Click **+** next to Files and create a new script file named `MaillifierDeployUpdate-dev`.
+2. Replace its contents with the full contents of [`MaillifierDeployUpdate-dev.gs`](MaillifierDeployUpdate-dev.gs) from this repository.
+3. Save (Ctrl+S).
+
+#### Step 4 — Link your GCP project
+
+1. In **Project Settings**, scroll to **Google Cloud Platform (GCP) Project**.
+2. Enter your GCP project number from the Prerequisites step and click **Set project**.
+3. Re-authorise if prompted.
+
+#### Step 5 — Enable Apps Script API for your account
+
+1. Open [script.google.com/home/usersettings](https://script.google.com/home/usersettings) **as the agent account**.
+2. Toggle **Google Apps Script API** to **ON**.
+
+#### Step 6 — Run the installer
+
+1. In the Apps Script editor, select `installMaillifier` in the function dropdown and click **Run**.
+2. Authorise the script when prompted — allow all requested permissions.
+3. Wait for the execution log to show `=== Installation complete ===`.
+4. Refresh the editor (Ctrl+Shift+R or F5) to see the installed files.
+
+#### Step 7 — Complete setup
+
+1. Set Script Properties (see [Step 5 — Set Script Properties](#step-5--set-script-properties) in Option B).
+2. In the editor, select `runInitialSetup` in the function dropdown and click **Run**.
+3. Google will request additional permissions — this is expected. The installer deploys new files with broader scopes, so a second authorisation round is required. Click **Allow all**.
+4. Wait for the execution log to show `Setup complete!`.
+
+#### Updating
+
+To pull the latest changes from this repository into your installed project, run `updateMaillifier()`. The function shows a diff before applying changes.
+
+---
 
 ### Option B — Manual (from this repository)
 
-Use this method to install immediately without waiting for tester approval. You will need to copy the files manually, but the result is identical to the automatic installer.
+Use this method to install immediately without any additional prerequisites. You will need to copy the files manually, but the result is identical to the script installer.
 
 #### Step 1 — Prerequisites
 
@@ -109,6 +182,9 @@ The files in this repository are:
 * `Logger.gs` — activity logging to Google Sheets
 * `AutoSetup.gs` — one-time setup script, creates resources and configures the project
 * `appsscript.json` — project manifest, enables Drive Advanced Service (copy via **Project Settings** → **Show "appsscript.json" manifest file**)
+* `MaillifierDeployUpdate-dev.gs` — optional, but recommended. Allows you to update Maillifier later by running `updateMaillifier()` instead of copying files manually.
+
+> **Note:** Adding `MaillifierDeployUpdate-dev.gs` requires no extra setup. To *run* the updater in the future, you will need to complete the GCP prerequisites from [Option A](#option-a--script-installer-maillifierdeployupdate-devgs) (GCP project with Apps Script API enabled, OAuth consent screen, Test users, and GCP project linked in Apps Script settings).
 
 #### Step 5 — Set Script Properties
 
@@ -267,7 +343,7 @@ Their email is added to `WHITELIST_EMAILS`. They can now forward emails to the a
 
 ### Split-Scope design
 
-Maillifier uses a Split-Scope OAuth architecture. The installer at maillifier.com requests only `script.projects` — the minimum scope needed to create the Apps Script project. All Gmail, Drive, and Docs access is requested by the Apps Script project itself, which runs inside the agent account. Your personal Google account never grants broad permissions.
+Maillifier uses a Split-Scope OAuth architecture. The script installer (`MaillifierDeployUpdate-dev.gs`) requests only `script.projects` and `script.external_request` — the minimum scopes needed to deploy files. All Gmail, Drive, and Docs access is requested by the Apps Script project itself during setup, which runs inside the agent account. Your personal Google account never grants broad permissions.
 
 ### Privacy
 
