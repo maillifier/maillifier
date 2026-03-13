@@ -3,3 +3,6 @@
 
 # clasp local config (contains Script ID — set by CI)
 .clasp.json
+
+# CI/CD workflows (managed in private maillifier.dev repo)
+.github/
