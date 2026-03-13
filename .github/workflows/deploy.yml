@@ -5,7 +5,7 @@
 # On push/merge to main: clasp push → PROD Apps Script project
 # ============================================================
 # Required GitHub Secrets:
-#   CLASPRC_JSON_PROD — contents of ~/.clasprc.json (vidnoe.soap2@gmail.com)
+#   CLASPRC_JSON_PROD — contents of ~/.clasprc.json (vidnoe.soap3@gmail.com)
 # ============================================================
 
 name: Deploy GAS to PROD
@@ -35,7 +35,7 @@ jobs:
       - name: Create .clasp.json
         run: |
           echo '{
-            "scriptId": "1Fy2_khpnVt_4hOtn17Yu1W1UpHm-fqWL9vgNXd2Sz_2bFXeI1lMlAvHy",
+            "scriptId": "1hzMMCCabCexYoIQhYboAzjCzWr5l9xMrDCkel0SnBdnQxQITzE7kqwo_",
             "rootDir": "."
           }' > .clasp.json
 
@@ -45,6 +45,6 @@ jobs:
       - name: Deployment summary
         run: |
           echo "✅ Deployed to PROD Apps Script"
-          echo "   Script ID: 1Fy2_khpnVt_4hOtn17Yu1W1UpHm-fqWL9vgNXd2Sz_2bFXeI1lMlAvHy"
+          echo "   Script ID: 1hzMMCCabCexYoIQhYboAzjCzWr5l9xMrDCkel0SnBdnQxQITzE7kqwo_"
           echo "   Files pushed:"
           ls -1 *.gs appsscript.json 2>/dev/null | sed 's/^/     /'
