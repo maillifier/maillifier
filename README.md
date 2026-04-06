@@ -123,7 +123,7 @@ Replace the contents of `appsscript.json` in the editor with:
 
 #### Step 6 — Run the installer
 
-1. In the Apps Script editor, select `MaillifierDeployUpdate-dev` in the file list, then select `installMaillifier` in the function dropdown and click **Run**.
+1. In the Apps Script editor, select `installMaillifier` in the function dropdown and click **Run**.
 2. Authorise the script when prompted — allow all requested permissions.
 3. Wait for the execution log to show `=== Installation complete ===`.
 4. Refresh the editor (Ctrl+Shift+R or F5) to see the installed files.
@@ -131,7 +131,7 @@ Replace the contents of `appsscript.json` in the editor with:
 #### Step 7 — Complete setup
 
 1. Set Script Properties (see [Step 5 — Set Script Properties](#step-5--set-script-properties) in Option B).
-2. In the editor, select `runInitialSetup` in the function dropdown and click **Run**.
+2. Select **AutoSetup.gs** in Files. In the editor, select `runInitialSetup` in the function dropdown and click **Run**.
 3. Google will request additional permissions — this is expected. The installer deploys new files with broader scopes, so a second authorisation round is required. Click **Allow all**.
 4. Wait for the execution log to show `Setup complete!`.
 
