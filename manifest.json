@@ -1,0 +1,16 @@
+{
+  "generated_at": "2026-04-06T22:33:04Z",
+  "branch": "main",
+  "files": [
+    {"name": "AdminCommands.gs", "sha": "36b59e72e7ee2ee4b34ca57b6dbda9ccd15dc1a6"},
+    {"name": "AttachmentHandler.gs", "sha": "7a96648ed9ef412dd2124c106137f2dbf322e188"},
+    {"name": "AutoSetup.gs", "sha": "4c8086e1949c26b568e130ff0c405f787b4405da"},
+    {"name": "Config.gs", "sha": "463f37ccb8a17345e3cbec62aa4c55dc201a9a87"},
+    {"name": "GeminiAPI.gs", "sha": "135d0883d7aad76e645be01da911e81ec0a2ee4f"},
+    {"name": "GmailManager.gs", "sha": "0edd10b3828b71358ebae5e3438b5e7c77eca9ab"},
+    {"name": "Logger.gs", "sha": "7e242994be2fabbd3f758ba0b777f087263ffcd5"},
+    {"name": "Main.gs", "sha": "abbe2c143e11afc2dddd12e07d2f832de5012c13"},
+    {"name": "UserSettings.gs", "sha": "15f09d414a1b3574ab014c4d0c80dc8dfd2bd9b4"},
+    {"name": "appsscript.json", "sha": "76f3e9254a2d56d24efa9d8d808dbe00d9257fde"}
+  ]
+}
