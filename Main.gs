@@ -50,7 +50,7 @@ function processEmails() {
       // 3.1 NEW: Process attachments
       const attachments = AttachmentHandler.processIncomingAttachments(lastMessage);
       const hasAttachments = attachments && attachments.length > 0;
-      
+
       if (hasAttachments) {
         console.log(`Found ${attachments.length} supported attachment(s)`);
       }
@@ -59,6 +59,7 @@ function processEmails() {
       const ownerName = getUserDisplayName(cleanSender) || "User";
       const personalKnowledge = UserSettings.getUserPrompt(cleanSender) || "";
       const agentName = (CONFIG.AGENT_NAME || "AI Agent");
+      const isAdmin = cleanSender === (PropertiesService.getScriptProperties().getProperty('ADMIN_EMAIL') || '').toLowerCase().trim();
 
       // INHERITANCE LOGIC: Combine Personal + Global rules
       const combinedKnowledge = personalKnowledge
@@ -67,11 +68,12 @@ function processEmails() {
 
       // 4. AI Generation WITH attachments
       const aiResponse = GeminiAPI.generateResponse(
-        emailBody, 
-        context, 
-        combinedKnowledge, 
+        emailBody,
+        context,
+        combinedKnowledge,
         ownerName,
-        attachments  // NEW: Pass attachments to Gemini
+        attachments,  // NEW: Pass attachments to Gemini
+        isAdmin
       );
 
       // 5. Structure the Reply Email
@@ -79,12 +81,12 @@ function processEmails() {
       const userTitle = ownerName.toUpperCase();
 
       const emailTitle = `RE: ${subject} (${agentName} Advice)`;
-      
+
       // Add attachment info to response
-      const attachmentInfo = hasAttachments 
+      const attachmentInfo = hasAttachments
         ? `\n\n📎 Analyzed ${attachments.length} attachment(s):\n${attachments.map(a => `- ${a.name}`).join('\n')}\n`
         : '';
-      
+
       const emailContent = `### ${headerTitle} ANALYSIS FOR ${userTitle} ###\n\n` +
                            `Confidence Level: ${aiResponse.confidence || "N/A"}\n` +
                            attachmentInfo +
@@ -112,10 +114,10 @@ function processEmails() {
       thread.addLabel(doneLabel);
       thread.moveToArchive();
 
-      const statusMsg = hasAttachments 
+      const statusMsg = hasAttachments
         ? `Processed with ${attachments.length} attachment(s) (${aiResponse.confidence})`
         : `Processed (${aiResponse.confidence})`;
-      
+
       Logger.log(sender, statusMsg, aiResponse.usage ? aiResponse.usage.totalTokenCount : 0);
 
     } catch (error) {

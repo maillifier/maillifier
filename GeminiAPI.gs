@@ -6,7 +6,7 @@
  */
 const GeminiAPI = {
 
-  generateResponse(currentEmailBody, context, knowledge, ownerName, attachments = []) {
+  generateResponse(currentEmailBody, context, knowledge, ownerName, attachments = [], isAdmin = false) {
     const apiKey = CONFIG.getApiKey();
     const url = `${CONFIG.GEMINI.ENDPOINT}${CONFIG.GEMINI.MODEL}:generateContent?key=${apiKey}`;
 
@@ -222,13 +222,12 @@ User commands (available to all authorized users):
   #SET_USER_PROMPT         — Clear personal rules (send with no text after command)
   #GET_PROMPT              — View current configuration (personal rules, global rules, system settings)
 
-Admin-only commands (available only to the administrator):
+${isAdmin ? `Admin commands (available to this user as administrator):
   #ADD_USER <email>        — Add a user to the whitelist
   #REMOVE_USER <email>     — Remove a user from the whitelist
   #LIST_USERS              — Show all authorized users
   #SET_ADMIN <email>       — Transfer admin rights to another account (irreversible)
-
-If the user asks about available commands or how to configure the assistant,
+` : ''}If the user asks about available commands or how to configure the assistant,
 include the relevant commands from the list above in your response.
 =========================================
 
