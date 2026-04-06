@@ -172,19 +172,29 @@ function fetchFileList_() {
   });
 }
 
-function fetchFileContent_(fileApiUrl) {
-  var response = UrlFetchApp.fetch(fileApiUrl, {
-    headers: {
-      'Accept': 'application/vnd.github.v3+json'
-    },
-    muteHttpExceptions: true
-  });
-
-  if (response.getResponseCode() !== 200) {
-    throw new Error('Failed to fetch file (' + response.getResponseCode() + ')');
+function fetchFileContent_(file) {
+  // For files under 1 MB the Contents API already returned base64 content
+  // and sha directly in the listing — no extra API call needed.
+  if (file.content && file.sha) {
+    return { content: file.content, sha: file.sha };
   }
 
-  return JSON.parse(response.getContentText());
+  // Fallback: download via raw.githubusercontent.com (no API rate limit)
+  // and fetch sha from the already-known listing entry.
+  var rawUrl = 'https://raw.githubusercontent.com/' + DEPLOY_CONFIG.OWNER + '/' +
+    DEPLOY_CONFIG.REPO + '/' + DEPLOY_CONFIG.BRANCH + '/' +
+    (DEPLOY_CONFIG.PATH ? DEPLOY_CONFIG.PATH + '/' : '') + file.name;
+
+  var response = UrlFetchApp.fetch(rawUrl, { muteHttpExceptions: true });
+
+  if (response.getResponseCode() !== 200) {
+    throw new Error('Failed to fetch file ' + file.name + ' (' + response.getResponseCode() + ')');
+  }
+
+  // Encode as base64 to keep the same contract with downloadAndVerify_
+  var contentBytes = response.getBlob().getBytes();
+  var base64 = Utilities.base64Encode(contentBytes);
+  return { content: base64, sha: file.sha };
 }
 
 
@@ -197,7 +207,7 @@ function downloadAndVerify_(fileList) {
 
   for (var i = 0; i < fileList.length; i++) {
     var file = fileList[i];
-    var data = fetchFileContent_(file.url);
+    var data = fetchFileContent_(file);
 
     // Decode base64 content from GitHub API
     var base64 = data.content.replace(/\n/g, '');

@@ -123,7 +123,7 @@ Replace the contents of `appsscript.json` in the editor with:
 
 #### Step 6 — Run the installer
 
-1. In the Apps Script editor, select `MaillifierDeployUpdate` in the file list, then select `installMaillifier` in the function dropdown and click **Run**.
+1. In the Apps Script editor, select `MaillifierDeployUpdate-dev` in the file list, then select `installMaillifier` in the function dropdown and click **Run**.
 2. Authorise the script when prompted — allow all requested permissions.
 3. Wait for the execution log to show `=== Installation complete ===`.
 4. Refresh the editor (Ctrl+Shift+R or F5) to see the installed files.
