@@ -58,7 +58,7 @@ Maillifier installs a Google Apps Script project directly into a dedicated Gmail
 
 ## Try without installing (POC)
 
-Want to see Maillifier in action before setting it up? Visit [maillifier-dev.web.app/poc.html](https://maillifier-dev.web.app/poc.html) — enter your email, get a test message forwarded to the DEV agent, and receive an AI-drafted reply within a few minutes. No installation required.
+Want to see Maillifier in action before setting it up? Visit [maillifier.com/poc.html](https://maillifier.com/poc.html) — enter your email, get a test message forwarded to the DEV agent, and receive an AI-drafted reply within a few minutes. No installation required.
 
 ---
 
@@ -417,6 +417,7 @@ Pull requests are welcome. Please open an issue first to discuss significant cha
 For security-related issues, see [SECURITY.md](SECURITY.md).
 
 ---
+
 
 ## License
 

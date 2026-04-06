@@ -17,10 +17,32 @@ const GeminiAPI = {
 You are a professional AI Assistant for ${ownerName}.
 
 YOUR PRIMARY MISSION:
-${hasAttachments ? 
-  'IMPORTANT: The email includes attached files (images, PDFs, documents, markdown, CSV). Please analyze them carefully and reference specific details in your response.' 
-  : 
+${hasAttachments ?
+  'IMPORTANT: The email includes attached files (images, PDFs, documents, markdown, CSV). Please analyze them carefully and reference specific details in your response.'
+  :
   'If instructions or notes are provided, translate and refine them into a professional email draft.'}
+
+=========================================
+RESPONSE LANGUAGE RULES:
+Detect the language(s) used in the incoming email and follow these rules:
+
+1. SIMPLE EMAIL (no forwarded content, single language):
+   Reply in the same language as the email, unless the email text explicitly
+   requests a different language.
+
+2. FORWARDED EMAIL (contains "Forwarded message", "Fwd:", or similar markers):
+   - The MAIN REPLY must be written in the language of the FORWARDED message
+     (the original email from the third party).
+   - If the forwarding user added instructions/notes in a DIFFERENT language,
+     append a brief translation of the key points of your reply into the
+     language of those instructions, separated by a clear divider
+     (e.g. "--- Translation for reference ---").
+   - If the forwarding user's instructions are in the SAME language as the
+     forwarded message, no translation section is needed.
+
+These rules apply to any language combination — do not hardcode or assume
+specific languages.
+=========================================
 
 =========================================
 KNOWLEDGE BASE / STRATEGIC RULES:
@@ -191,6 +213,25 @@ I'll convert the PDF document to an editable Word format.
 The conversion will preserve the original formatting, images, and tables from the PDF.` : ''}
 =========================================
 
+=========================================
+AVAILABLE EMAIL COMMANDS:
+The user can manage the AI assistant by sending these commands to the agent email address.
+
+User commands (available to all authorized users):
+  #SET_USER_PROMPT <text>  — Set personal rules for the AI (e.g. vacation notice, tone, links)
+  #SET_USER_PROMPT         — Clear personal rules (send with no text after command)
+  #GET_PROMPT              — View current configuration (personal rules, global rules, system settings)
+
+Admin-only commands (available only to the administrator):
+  #ADD_USER <email>        — Add a user to the whitelist
+  #REMOVE_USER <email>     — Remove a user from the whitelist
+  #LIST_USERS              — Show all authorized users
+  #SET_ADMIN <email>       — Transfer admin rights to another account (irreversible)
+
+If the user asks about available commands or how to configure the assistant,
+include the relevant commands from the list above in your response.
+=========================================
+
 CRITICAL TASK:
 1. Read the "CURRENT INCOMING EMAIL" below.
 ${hasAttachments ? '2. Analyze ALL attached files (images, PDFs, documents, markdown, CSV).\n3. Reference specific details from attachments.' : '2. If it contains instructions, prepare a formal draft.'}
@@ -286,7 +327,7 @@ ${hasAttachments ? '7' : '5'}. Evaluate your confidence in the output.`;
     if (aiText.includes('[CONVERT_PDF_TO_DOCX:')) {
       console.log('Detected [CONVERT_PDF_TO_DOCX:] marker in response');
       const conversionMatches = this._extractPdfConversionRequests(aiText);
-      
+
       conversionMatches.forEach(match => {
         console.log(`Processing PDF conversion: ${match.pdfSource} -> ${match.outputName}.docx`);
 
@@ -401,7 +442,7 @@ ${hasAttachments ? '7' : '5'}. Evaluate your confidence in the output.`;
       const data = match.content.split('\n')
         .filter(line => line.trim())
         .map(line => line.split('|').map(cell => cell.trim()));
-      
+
       if (data.length > 0) {
         const xlsxBlob = AttachmentHandler.generateExcelSpreadsheet(data, match.filename);
         if (xlsxBlob) {
@@ -488,22 +529,22 @@ ${hasAttachments ? '7' : '5'}. Evaluate your confidence in the output.`;
    */
   _extractPdfConversionRequests(text) {
     const matches = [];
-    
+
     // Pattern: [CONVERT_PDF_TO_DOCX:output_name] followed by [PDF_SOURCE:filename.pdf]
     const convertPattern = /\[CONVERT_PDF_TO_DOCX:([^\]]+)\]/g;
     const sourcePattern = /\[PDF_SOURCE:([^\]]+)\]/g;
-    
+
     const outputNames = [];
     let match;
     while ((match = convertPattern.exec(text)) !== null) {
       outputNames.push(match[1].trim());
     }
-    
+
     const pdfSources = [];
     while ((match = sourcePattern.exec(text)) !== null) {
       pdfSources.push(match[1].trim());
     }
-    
+
     // Pair them up
     const count = Math.min(outputNames.length, pdfSources.length);
     for (let i = 0; i < count; i++) {
@@ -512,8 +553,8 @@ ${hasAttachments ? '7' : '5'}. Evaluate your confidence in the output.`;
         pdfSource: pdfSources[i]
       });
     }
-    
-    // Fallback: if no PDF_SOURCE but CONVERT_PDF_TO_DOCX exists, 
+
+    // Fallback: if no PDF_SOURCE but CONVERT_PDF_TO_DOCX exists,
     // try to find any PDF in the conversation
     if (outputNames.length > 0 && pdfSources.length === 0) {
       console.log('No [PDF_SOURCE:] found, will try to use first available PDF');
@@ -524,7 +565,7 @@ ${hasAttachments ? '7' : '5'}. Evaluate your confidence in the output.`;
         });
       });
     }
-    
+
     return matches;
   },
 
@@ -624,16 +665,16 @@ ${hasAttachments ? '7' : '5'}. Evaluate your confidence in the output.`;
 
   _extractChartConfig(text) {
     const matches = [];
-    
+
     const createPattern = /\[CREATE_CHART:([^\]]+)\]/g;
     const configPattern = /\[CHART_CONFIG_START\]([\s\S]*?)\[CHART_CONFIG_END\]/g;
-    
+
     let createMatch;
     const filenames = [];
     while ((createMatch = createPattern.exec(text)) !== null) {
       filenames.push(createMatch[1].trim());
     }
-    
+
     let configMatch;
     let index = 0;
     while ((configMatch = configPattern.exec(text)) !== null) {
@@ -643,7 +684,7 @@ ${hasAttachments ? '7' : '5'}. Evaluate your confidence in the output.`;
       });
       index++;
     }
-    
+
     return matches;
   },
 
